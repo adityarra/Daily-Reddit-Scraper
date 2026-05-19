@@ -203,10 +203,14 @@ def main():
     target_subs = today_config.get("subreddits", [])
     threshold = today_config.get("threshold", 2000)
     
+    allowed_tags = today_config.get("allowed_tags", [])
+    
     print(f"Execution Time (IST): {current_ist_time.strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"Today is {current_day}.")
     print(f"Target Subreddits: {target_subs}")
     print(f"Minimum Upvote Threshold: {threshold:,}")
+    if allowed_tags:
+        print(f"Restricted to Tags: {allowed_tags}")
 
     if not target_subs:
         print(f"No subreddits configured for {current_day}. Exiting pipeline.")
@@ -219,6 +223,9 @@ def main():
         f"**Minimum Threshold:** `{threshold:,}` upvotes\n"
         f"---"
     )
+    if allowed_tags:
+        status_content += f"**Allowed Tags:** {', '.join(allowed_tags)}\n"
+    status_content += "---"
     try:
         requests.post(WEBHOOK_URL, json={"content": status_content})
     except Exception as e:
@@ -241,6 +248,11 @@ def main():
             
             for post in posts:
                 p = post['data']
+                post_flair = str(p.get('link_flair_text') or "").strip()
+                if allowed_tags:
+                    if not any(tag.lower() in post_flair.lower() for tag in allowed_tags):
+                        continue
+                        
                 if p['score'] >= threshold:
                     urls = extract_urls(p)
                     for idx, img_url in enumerate(urls, 1):
@@ -268,7 +280,11 @@ def main():
             requests.post(WEBHOOK_URL, files=files_payload)
         print("✅ Delivery finished!")
     else:
-        print(f"No posts in today's subreddits crossed the required score of {threshold:,}.")
+        try:
+            requests.post(WEBHOOK_URL, json={"content": f"No posts in today's batch crossed the required score of `{threshold:,}` or matched your required tags."})
+        except:
+            pass
+        print(f"No posts in today's subreddits met your score and tag criteria.")
 
 if __name__ == "__main__":
     main()
