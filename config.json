@@ -1,30 +1,37 @@
 {
   "Monday": {
     "subreddits": ["AskReddit", "news", "worldnews"],
-    "threshold": 15000
+    "threshold": 15000,
+    "allowed_tags": []
   },
   "Tuesday": {
     "subreddits": ["science", "space", "explainlikeimfive"],
-    "threshold": 8000
+    "threshold": 8000,
+    "allowed_tags": []
   },
   "Wednesday": {
     "subreddits": ["gaming", "movies", "Music"],
-    "threshold": 12000
+    "threshold": 12000,
+    "allowed_tags": []
   },
   "Thursday": {
     "subreddits": ["todayilearned", "interestingasfuck", "mildlyinteresting"],
-    "threshold": 20000
+    "threshold": 20000,
+    "allowed_tags": []
   },
   "Friday": {
     "subreddits": ["pics", "aww", "funny"],
-    "threshold": 25000
+    "threshold": 25000,
+    "allowed_tags": []
   },
   "Saturday": {
     "subreddits": ["television", "books", "Showerthoughts"],
-    "threshold": 5000
+    "threshold": 5000,
+    "allowed_tags": []
   },
   "Sunday": {
     "subreddits": ["history", "dataisbeautiful", "Art"],
-    "threshold": 7500
+    "threshold": 7500,
+    "allowed_tags": []
   }
 }
